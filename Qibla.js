@@ -15,8 +15,7 @@ const statusEl = document.getElementById('status');
 const compassEl = document.getElementById('compass');
 const kaabaMarker = document.getElementById('kaabaMarker');
 let qibla = null;
-let headingFiltered = 0;
-let hasHeading = false;
+let current = 0;
 
 // بدء التشغيل بزر واحد
 document.getElementById('startBtn').addEventListener('click', startAll);
@@ -37,8 +36,8 @@ async function startAll(){
   statusEl.textContent='جاري تحديد الموقع...';
   navigator.geolocation.getCurrentPosition(pos=>{
     qibla = computeQibla(pos.coords.latitude, pos.coords.longitude);
-    placeKaabaMarker();
-    statusEl.textContent='حرّك الهاتف حتى تستقر أيقونة الكعبة على اتجاه القبلة.';
+    updateKaabaMarker();
+    statusEl.textContent='حرّك الهاتف حتى يثبت السهم على القبلة.';
     window.addEventListener('deviceorientation', onOrient, true);
   }, _=>{
     statusEl.textContent='❌ فشل تحديد الموقع. فعّل GPS ومنح الإذن.';
@@ -46,10 +45,13 @@ async function startAll(){
 }
 
 function norm(deg){ let d=(deg%360+360)%360; if(d>180)d-=360; return d; }
-function placeKaabaMarker(){
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+function updateKaabaMarker(){
   if(!kaabaMarker || qibla==null) return;
   kaabaMarker.style.transform =
     `translate(-50%, -50%) rotate(${qibla}deg) translateY(-${MARKER_DISTANCE}px) rotate(${-qibla}deg)`;
+  kaabaMarker.style.opacity = '1';
 }
 
 function onOrient(e){
@@ -57,18 +59,13 @@ function onOrient(e){
   let heading = (typeof e.webkitCompassHeading==='number') ? e.webkitCompassHeading : (360 - (e.alpha||0));
   if(isNaN(heading)) { statusEl.textContent='⚠️ فعّل مستشعر الحركة.'; return; }
 
-  if(!hasHeading){
-    headingFiltered = heading;
-    hasHeading = true;
-  }else{
-    headingFiltered += norm(heading - headingFiltered) * 0.2;
-  }
+  let target = qibla - heading;            // درجة
+  let delta  = norm(target - current);
+  current    = lerp(current, current + delta, 0.22);
 
   if(compassEl){
-    compassEl.style.transform = `rotate(${-headingFiltered}deg)`;
+    compassEl.style.transform = `rotate(${-current}deg)`;
   }
-
-  const target = qibla - heading;            // درجة
 
   const ok = Math.abs(norm(target)) <= 6;
   if(ok){
@@ -77,6 +74,6 @@ function onOrient(e){
     if(navigator.vibrate) navigator.vibrate([0,40,40,40]);
   }else{
     statusEl.classList.remove('success');
-    statusEl.textContent = 'اضغط ابدأ ثم حرّك الهاتف حتى تستقر أيقونة الكعبة على اتجاه القبلة.';
+    statusEl.textContent = 'اضغط ابدأ ثم حرّك الهاتف حتى يثبت السهم على القبلة.';
   }
 }
