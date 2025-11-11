@@ -55,7 +55,7 @@ h1{margin:22px 0 8px; font-size:28px; font-weight:800}
   position:absolute;
   top:50%;
   left:50%;
-  transform:translate(-50%, -50%) translateY(-120px);
+  transform:translate(-50%, -50%);
   transform-origin:center center;
   font-size:32px;
   z-index:2;
