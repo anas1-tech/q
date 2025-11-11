@@ -12,8 +12,11 @@ function computeQibla(lat, lon){
 }
 
 const statusEl = document.getElementById('status');
+const compassEl = document.getElementById('compass');
 const kaabaMarker = document.getElementById('kaabaMarker');
 let qibla = null;
+let headingFiltered = 0;
+let hasHeading = false;
 
 // بدء التشغيل بزر واحد
 document.getElementById('startBtn').addEventListener('click', startAll);
@@ -34,6 +37,7 @@ async function startAll(){
   statusEl.textContent='جاري تحديد الموقع...';
   navigator.geolocation.getCurrentPosition(pos=>{
     qibla = computeQibla(pos.coords.latitude, pos.coords.longitude);
+    placeKaabaMarker();
     statusEl.textContent='حرّك الهاتف حتى تستقر أيقونة الكعبة على اتجاه القبلة.';
     window.addEventListener('deviceorientation', onOrient, true);
   }, _=>{
@@ -41,26 +45,30 @@ async function startAll(){
   }, {enableHighAccuracy:true, timeout:10000});
 }
 
-// تنعيم الزاوية
-let current = 0;
 function norm(deg){ let d=(deg%360+360)%360; if(d>180)d-=360; return d; }
-function lerp(a,b,t){ return a+(b-a)*t; }
+function placeKaabaMarker(){
+  if(!kaabaMarker || qibla==null) return;
+  kaabaMarker.style.transform =
+    `translate(-50%, -50%) rotate(${qibla}deg) translateY(-${MARKER_DISTANCE}px) rotate(${-qibla}deg)`;
+}
 
 function onOrient(e){
   if(qibla==null) return;
   let heading = (typeof e.webkitCompassHeading==='number') ? e.webkitCompassHeading : (360 - (e.alpha||0));
   if(isNaN(heading)) { statusEl.textContent='⚠️ فعّل مستشعر الحركة.'; return; }
 
-  // الهدف: فرق القبلة عن اتجاه الجهاز
-  let target = qibla - heading;            // درجة
-  let delta  = norm(target - current);
-  current    = lerp(current, current + delta, 0.22);
-
-  if(kaabaMarker){
-    const angle = current;
-    kaabaMarker.style.transform =
-      `translate(-50%, -50%) rotate(${angle}deg) translateY(-${MARKER_DISTANCE}px) rotate(${-angle}deg)`;
+  if(!hasHeading){
+    headingFiltered = heading;
+    hasHeading = true;
+  }else{
+    headingFiltered += norm(heading - headingFiltered) * 0.2;
   }
+
+  if(compassEl){
+    compassEl.style.transform = `rotate(${-headingFiltered}deg)`;
+  }
+
+  const target = qibla - heading;            // درجة
 
   const ok = Math.abs(norm(target)) <= 6;
   if(ok){
