@@ -13,13 +13,12 @@ function computeQibla(lat, lon){
 }
 
 const statusEl = document.getElementById('status');
-const compassEl = document.getElementById('compass');
 const kaabaMarker = document.getElementById('kaabaMarker');
 const locationInfoEl = document.getElementById('locationInfo');
+const needle = document.getElementById('needle');
 let qibla = null;
-let headingFiltered = 0;
-let hasHeading = false;
 let orientationAttached = false;
+let currentNeedle = 0;
 
 // بدء التشغيل بزر واحد
 document.getElementById('startBtn').addEventListener('click', startAll);
@@ -83,18 +82,15 @@ function onOrient(e){
   let heading = (typeof e.webkitCompassHeading==='number') ? e.webkitCompassHeading : (360 - (e.alpha||0));
   if(isNaN(heading)) { statusEl.textContent='⚠️ فعّل مستشعر الحركة.'; return; }
 
-  if(!hasHeading){
-    headingFiltered = heading;
-    hasHeading = true;
-  }else{
-    headingFiltered += norm(heading - headingFiltered) * 0.18;
+  const target = qibla - heading;
+  const delta  = norm(target - currentNeedle);
+  currentNeedle = currentNeedle + delta * 0.22;
+
+  if(needle){
+    needle.style.transform = `translateX(-50%) rotate(${currentNeedle}deg)`;
   }
 
-  if(compassEl){
-    compassEl.style.transform = `rotate(${-headingFiltered}deg)`;
-  }
-
-  const error = Math.abs(norm(qibla - headingFiltered));
+  const error = Math.abs(norm(target));
   const ok = error <= 6;
   if(ok){
     statusEl.textContent = 'اتجاه القبلة صحيح ✅';
