@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اتجاه القبلة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Qibla.css" />
+</head>
+<body>
+  <h1>اتجاه القبلة</h1>
+
+  <div class="compass" id="compass">
+    <div class="gold-ring">
+      <div class="islamic-pattern"></div>
+    </div>
+    <div class="face"></div>
+
+    <!-- الاتجاهات -->
+    <div class="direction north">N</div>
+<div class="direction south">S</div>
+<div class="direction east">E</div>
+<div class="direction west">W</div>
+<div class="direction qibla">Qibla</div>
+
+
+    <div class="kaaba-marker" id="kaabaMarker" aria-label="اتجاه الكعبة">
+      <span role="img" aria-hidden="false">🕋</span>
+    </div>
+    <div class="center-dot"></div>
+  </div>
+
+  <button id="startBtn">ابدأ</button>
+  <p id="status">اضغط ابدأ ثم حرّك الهاتف حتى يثبت السهم على القبلة.</p>
+
+  <script src="Qibla.js"></script>
+</body>
+</html>

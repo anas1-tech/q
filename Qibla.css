@@ -1,0 +1,106 @@
+:root{
+  --bg:#0b0b0b;
+  --gold:#d4af37;
+  --gold-dark:#b38e2f;
+  --text:#f5f5f5;
+  --muted:#b8b8b8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Tajawal', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  text-align:center;
+}
+h1{margin:22px 0 8px; font-size:28px; font-weight:800}
+
+.compass{
+  position:relative; width:320px; height:320px; margin:20px auto 10px;
+}
+
+/* الإطار الذهبي */
+.gold-ring{
+  position:absolute; inset:0; border-radius:50%;
+  background: radial-gradient(circle at 50% 50%, transparent 64%, var(--gold) 64% 100%);
+}
+
+/* زخرفة إسلامية خفيفة داخل الحلقة الذهبية */
+.islamic-pattern{
+  position:absolute; inset:0; border-radius:50%;
+  -webkit-mask:
+    radial-gradient(circle at 50% 50%, transparent 64%, #000 64% 100%);
+  mask:
+    radial-gradient(circle at 50% 50%, transparent 64%, #000 64% 100%);
+  background:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">  <defs>    <pattern id="p" width="20" height="20" patternUnits="userSpaceOnUse">      <path d="M10 0 L12 6 L18 8 L12 10 L10 16 L8 10 L2 8 L8 6 Z" fill="%23e5c65a"/>    </pattern>  </defs>  <rect width="120" height="120" fill="url(%23p)" opacity="0.25"/></svg>') center/cover no-repeat;
+  opacity:.35;
+}
+
+/* وجه البوصلة الداخلي */
+.face{
+  position:absolute; inset:14px; border-radius:50%;
+  background: radial-gradient(circle at 50% 45%, #ffffff, #ffffff 65%);
+}
+
+/* الاتجاهات الأربع */
+.marks span{
+  position:absolute; color:#e7d07a; font-weight:700; font-size:16px; opacity:.9;
+}
+.marks .n{top:10px; left:50%; transform:translateX(-50%);}
+.marks .s{bottom:10px; left:50%; transform:translateX(-50%);}
+.marks .e{right:10px; top:50%; transform:translateY(-50%);}
+.marks .w{left:10px; top:50%; transform:translateY(-50%);}
+.marks .qibla{top:10px; left:10px; transform: rotate(0deg) translateX(-50%);}
+
+.kaaba-marker{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) translateY(-120px);
+  transform-origin:center center;
+  font-size:32px;
+  z-index:2;
+  transition:transform 0.25s ease-out;
+  pointer-events:none;
+}
+.kaaba-marker span{display:block;}
+
+/* النقطة السوداء في المركز */
+.center-dot {
+    width: 14px;
+    height: 14px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3; /* فوق السهم */
+}
+.direction {
+    position: absolute;
+    color: #d4af37;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ن */
+.north { top: 10%; left: 50%; transform: translateX(-50%); }
+
+/* س */
+.south { bottom: 10%; left: 50%; transform: translateX(-50%); }
+
+/* ش */
+.east { right: 10%; top: 50%; transform: translateY(-50%); }
+
+/* غ */
+.west { left: 10%; top: 50%; transform: translateY(-50%); }
+
+/*qibla*/
+.qibla { top: 10px; left: 10px; transform: rotate(0deg) translateX(-50%);}
+
+button{
+  background:var(--gold); color:#111; border:0; border-radius:12px;
+  padding:12px 26px; font-weight:700; cursor:pointer; font-size:16px;
+}
+#status{margin:12px 0 18px; color:var(--muted); font-size:15px;}
+.success{color:#19c37d !important; font-weight:700;}
