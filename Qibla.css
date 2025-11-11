@@ -12,6 +12,16 @@ body{
   text-align:center;
 }
 h1{margin:22px 0 8px; font-size:28px; font-weight:800}
+.kaaba-info{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:var(--gold);
+  font-weight:600;
+  margin:0 0 8px;
+}
+.kaaba-emoji{font-size:24px;}
 
 .compass{
   position:relative; width:320px; height:320px; margin:20px auto 10px;
