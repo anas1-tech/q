@@ -59,7 +59,6 @@ h1{margin:22px 0 8px; font-size:28px; font-weight:800}
 .marks .s{bottom:10px; left:50%; transform:translateX(-50%);}
 .marks .e{right:10px; top:50%; transform:translateY(-50%);}
 .marks .w{left:10px; top:50%; transform:translateY(-50%);}
-.marks .qibla{top:10px; left:10px; transform: rotate(0deg) translateX(-50%);}
 
 /* الإبرة – قاعدة من المركز وسهم في النهاية */
 .needle {
@@ -130,9 +129,6 @@ h1{margin:22px 0 8px; font-size:28px; font-weight:800}
 
 /* غ */
 .west { left: 10%; top: 50%; transform: translateY(-50%); }
-
-/*qibla*/
-.qibla { top: 10px; left: 10px; transform: rotate(0deg) translateX(-50%);}
 
 button{
   background:var(--gold); color:#111; border:0; border-radius:12px;
